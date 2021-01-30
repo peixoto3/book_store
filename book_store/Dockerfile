@@ -1,4 +1,4 @@
-FROM python:3.7.9-alpine
+FROM python:3.9-alpine
 
 WORKDIR /app
 
@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY . /app/
 
-RUN python manage.py runserver
+CMD python /app/manage.py runserver 0.0.0.0:8000

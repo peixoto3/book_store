@@ -5,22 +5,23 @@ services:
     image: postgres:10.12-alpine
     container_name: db
     ports:
-      - "5432:5432"
+      - "6543:5432"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB:-book_store}
-      - POSTGRES_USER=${POSTGRES_USER:-postgres}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
-      - POSTGRES_HOST=${POSTGRES_HOST:-db}
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=book_store"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
   app:
-    build:
-      context: .
-    #entrypoint: ./docker/entrypoint.web.sh
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-book_store}
-      - POSTGRES_USER=${POSTGRES_USER:-postgres}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
-      - POSTGRES_HOST=${POSTGRES_HOST:-db}
+    build: .
+    volumes:
+      - .:/app/
+    env_file:
+      - ./.env.dev
     ports:
-      - "8000:8000"
+      - 8000:8000
     depends_on:
       - db
+volumes:
+  postgres_data:
