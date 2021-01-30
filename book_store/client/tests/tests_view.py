@@ -1,5 +1,5 @@
-from .models import Client
-from .serializers import ClientSerializer
+from client.models import Client
+from client.serializers import ClientSerializer
 
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -34,7 +34,14 @@ class ClientTests(APITestCase):
         invalid_payload = {}
         response = self.client.post(url, invalid_payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['name'][0], "Este campo é obrigatório.")
+        self.assertEqual(response.data['name'][0], 'Este campo é obrigatório.')
+
+    def test_create_client_already_existent(self):
+        url = reverse('client-list')
+        invalid_payload = {'name': 'Carolina Peixoto'}
+        response = self.client.post(url, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['name'][0], 'Cliente com este name já existe.')
 
     def test_update_client(self):
         url = reverse('client-detail', kwargs={'pk': self.carol.pk})
