@@ -8,6 +8,5 @@ class Client(models.Model):
         return self.name
 
     class Meta:
-        app_label = 'client'
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
