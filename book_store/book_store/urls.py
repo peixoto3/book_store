@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from client.urls import router
+from book.urls import router_book
+from client.urls import router_client
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls))
+    path('api/v1/', include(router_client.urls)),
+    path('api/v1/', include(router_book.urls))
 ]
