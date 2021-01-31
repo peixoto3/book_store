@@ -22,6 +22,18 @@ class ClientTests(APITestCase):
         self.assertEqual(response.data, clients_serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_get_single_client(self):
+        url = reverse('client-detail', kwargs={'pk': self.rodrigo.pk})
+        client_expected = ClientSerializer(self.rodrigo)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, client_expected.data)
+
+    def test_get_single_client_not_found(self):
+        url = reverse('client-detail', kwargs={'pk': 50})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_create_client(self):
         url = reverse('client-list')
         data = {'name': 'Guilherme Peixoto de Souza'}
@@ -58,16 +70,3 @@ class ClientTests(APITestCase):
         response = self.client.put(url, client_payload_update, format='json')
         self.assertEqual(response.data, client_payload_expected)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_single_client(self):
-        url = reverse('client-detail', kwargs={'pk': self.rodrigo.pk})
-        client = Client.objects.get(pk=self.rodrigo.pk)
-        client_serializer = ClientSerializer(client)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, client_serializer.data)
-
-    def test_get_single_client_not_found(self):
-        url = reverse('client-detail', kwargs={'pk': 50})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
