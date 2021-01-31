@@ -2,11 +2,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import BookSerializer, BookReservationSerializer
-from .models import Book, BookReservation
-from client.models import Client
+from .models import Book
 
 from rest_framework import viewsets
 from rest_framework import status
+
+BOOK_RESERVED_SUCCESS_MESSAGE = 'Livro reservado com sucesso!'
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -23,7 +24,7 @@ class BookViewSet(viewsets.ModelViewSet):
 
         book.reserved = True
         book.save()
-        return Response({'data': {'message': 'Livro reservado com sucesso!'}}, status=status.HTTP_200_OK)
+        return Response({'data': {'message': BOOK_RESERVED_SUCCESS_MESSAGE}}, status=status.HTTP_200_OK)
 
     def delivery(self, request, pk=None):
         pass
