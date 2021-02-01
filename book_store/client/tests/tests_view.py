@@ -38,8 +38,10 @@ class ClientTests(APITestCase):
         url = reverse('client-list')
         data = {'name': 'Guilherme Peixoto de Souza'}
         response = self.client.post(url, data, format='json')
+        client_expected = Client.objects.get(name='Guilherme Peixoto de Souza')
+        client_expected_serializer = ClientSerializer(client_expected)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data, {'id': 4, 'name': 'Guilherme Peixoto de Souza'})
+        self.assertEqual(response.data, client_expected_serializer.data)
 
     def test_create_client_invalid(self):
         url = reverse('client-list')
