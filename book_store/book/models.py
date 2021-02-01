@@ -33,6 +33,10 @@ class BookReservation(models.Model):
     date = models.DateField(auto_now_add=True)
     delivery_date = models.DateField(null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Reserva de Livro'
+        verbose_name_plural = 'Reserva de Livros'
+
     def __str__(self):
         return f'{self.book}, {self.client.name}, {self.date}'
 
@@ -70,7 +74,3 @@ class BookReservation(models.Model):
 
         if days_of_delay > 5:
             return self._calculate_penalty(self.SEVEN_PERCENT_TAX)
-
-    class Meta:
-        verbose_name = 'Reserva de Livro'
-        verbose_name_plural = 'Reserva de Livros'
