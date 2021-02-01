@@ -8,10 +8,6 @@ import datetime
 from client.models import Client
 
 
-class Tax(Enum):
-    TEST = 1.5
-
-
 class Book(models.Model):
     title = models.CharField(max_length=300)
     author = models.CharField(max_length=200)
