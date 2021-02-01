@@ -1,5 +1,7 @@
-from book.models import Book
+from book.models import Book, BookReservation
+from client.models import Client
 from book.serializers import BookSerializer
+from book.serializers import BookReservationSerializer
 
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -23,6 +25,9 @@ class BookTests(APITestCase):
             title='Clean Code',
             author='Robert C. Martin',
             numbers_pages=456
+        )
+        self.client_for_reserve_book = Client.objects.create(
+            name='Guilherme'
         )
 
     def test_get_all_books(self):
@@ -97,3 +102,14 @@ class BookTests(APITestCase):
         response = self.client.put(url, book_payload_update, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, book_payload_expected)
+
+    def test_book_reserve(self):
+        url = reverse('book-reserve', kwargs={'pk': self.book_clean_code.pk})
+        reserve_payload = {
+            'client': self.client_for_reserve_book.pk,
+            'price': 150.00,
+            'book': self.book_clean_code.pk
+        }
+        response = self.client.post(url, reserve_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {'data': {'message': 'Livro reservado com sucesso!'}})
