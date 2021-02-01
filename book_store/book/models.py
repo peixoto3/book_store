@@ -1,7 +1,5 @@
 from decimal import Decimal
-from enum import Enum
 
-from django.core.exceptions import ValidationError
 from django.db import models
 import datetime
 
@@ -12,6 +10,7 @@ class Book(models.Model):
     title = models.CharField(max_length=300)
     author = models.CharField(max_length=200)
     numbers_pages = models.IntegerField()
+    reserve_price = models.DecimalField(max_digits=10, decimal_places=2)
     reserved = models.BooleanField(default=False)
 
     def __str__(self):
@@ -31,7 +30,6 @@ class BookReservation(models.Model):
 
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField(auto_now_add=True)
     delivery_date = models.DateField(null=True, blank=True)
 
@@ -56,7 +54,7 @@ class BookReservation(models.Model):
 
     def _calculate_penalty(self, tax):
         """Calcula a multa a partir do percentual (tax) sobre o valor da reserva"""
-        return self.price * Decimal(tax)
+        return self.book.reserve_price * Decimal(tax)
 
     def value_penalty(self):
         days_of_delay = self.get_days_of_delay()

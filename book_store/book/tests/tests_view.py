@@ -14,17 +14,20 @@ class BookTests(APITestCase):
         self.book_programming = Book.objects.create(
             title='Algoritmos',
             author='Thomas Cormen',
-            numbers_pages=13212
+            numbers_pages=13212,
+            reserve_price=150
         )
         self.book_mathematics = Book.objects.create(
             title='Mathematics',
             author='Autor 01',
-            numbers_pages=600
+            numbers_pages=600,
+            reserve_price=80
         )
         self.book_clean_code = Book.objects.create(
             title='Clean Code',
             author='Robert C. Martin',
-            numbers_pages=456
+            numbers_pages=456,
+            reserve_price=100
         )
         self.client_for_reserve_book = Client.objects.create(
             name='Guilherme'
@@ -56,6 +59,7 @@ class BookTests(APITestCase):
             'title': 'Fluent Python',
             'author': 'Luciano Ramalho',
             'numbers_pages': 800,
+            'reserve_price': 110
         }
         response = self.client.post(url, data, format='json')
         book_expected = Book.objects.get(title='Fluent Python', author='Luciano Ramalho')
@@ -79,7 +83,8 @@ class BookTests(APITestCase):
         invalid_payload = {
             'title': 'Algoritmos',
             'author': 'Thomas Cormen',
-            'numbers_pages': 100
+            'numbers_pages': 100,
+            'reserve_price': 130
         }
         response = self.client.post(url, invalid_payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -90,13 +95,15 @@ class BookTests(APITestCase):
         book_payload_update = {
             'title': 'Código Limpo',
             'author': 'Robert C. Martin',
-            'numbers_pages': 456
+            'numbers_pages': 456,
+            'reserve_price': 130
         }
         book_payload_expected = {
             'id': self.book_clean_code.pk,
             'title': 'Código Limpo',
             'author': 'Robert C. Martin',
             'numbers_pages': 456,
+            'reserve_price': '130.00',
             'status': 'Disponível'
         }
         response = self.client.put(url, book_payload_update, format='json')
@@ -107,7 +114,6 @@ class BookTests(APITestCase):
         url = reverse('book-reserve', kwargs={'pk': self.book_clean_code.pk})
         reserve_payload = {
             'client': self.client_for_reserve_book.pk,
-            'price': 150.00,
             'book': self.book_clean_code.pk
         }
         response = self.client.post(url, reserve_payload)

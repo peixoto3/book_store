@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from .models import Book, BookReservation
 
 from rest_framework import serializers
@@ -13,13 +11,18 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ['id', 'title', 'author', 'numbers_pages', 'status']
+        fields = ['id', 'title', 'author', 'numbers_pages', 'reserve_price', 'status']
 
 
 class BookReservationSerializer(serializers.ModelSerializer):
+    def validate_book(self, book):
+        if book.reserved:
+            raise serializers.ValidationError("O livro já está reservado")
+        return book
+
     class Meta:
         model = BookReservation
-        fields = ['price', 'book', 'client']
+        fields = ['book', 'client']
 
 
 class BookReservationDetailSerializer(serializers.ModelSerializer):
@@ -35,11 +38,6 @@ class BookReservationDetailSerializer(serializers.ModelSerializer):
     def get_interest_per_day(self, obj):
         return 0.00
 
-    def validate_book(self, book):
-        if book.reserved:
-            raise serializers.ValidationError("O livro já está reservado")
-        return book
-
     def get_book_name(self, obj):
         return obj.book.title
 
@@ -47,7 +45,7 @@ class BookReservationDetailSerializer(serializers.ModelSerializer):
         return obj.get_days_of_delay()
 
     def get_total_price(self, obj):
-        return obj.price + obj.value_penalty()
+        return obj.book.reserve_price + obj.value_penalty()
 
     class Meta:
         model = BookReservation
@@ -55,7 +53,6 @@ class BookReservationDetailSerializer(serializers.ModelSerializer):
             'date',
             'delivery_date',
             'book_name',
-            'price',
             'days_of_delay',
             'penalty',
             'interest_per_day',

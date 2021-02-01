@@ -21,7 +21,6 @@ class BookViewSet(viewsets.ModelViewSet):
     def reserve(self, request, pk=None):
         reserve_payload = {
             'client': request.data.get('client', None),
-            'price': request.data.get('price', 0),
             'book': pk
         }
         book_reservation_serializer = BookReservationSerializer(data=reserve_payload)
