@@ -108,13 +108,11 @@ Para rodar o projeto com docker, certifique-se que tem o docker e docker-compose
 
 ### Docker-compose
 
+- [Install Docker Compose](https://docs.docker.com/compose/install/)
+
 ### Variáveis de ambiente
 
 Para configurar algumas variáveis de ambiente, editar o arquivo ``.env.dev`` na raiz do projeto. 
-
-
-
-- [Install Docker Compose](https://docs.docker.com/compose/install/)
 
 ### Parar rodar todos os containers:
 
