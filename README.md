@@ -5,7 +5,7 @@ API Rest para uma livraria online.
 
 # Recursos 
 O usuário pode gerenciar livros, reservas de livro e clientes. O tempo padrão para cada reserva são três dias. 
-Caso ultrapasse, deverá ser calculada uma multa sobre o atraso e juros ao dia seguindo as seguintes regras:
+Caso ultrapasse, deverá ser calculada uma multa e juros ao dia sobre o valor da reserva, de acordo com as seguintes regras:
  
 | Dias de Atraso  |  Multa  | Juros ao dia
 | ------------------- | ------------------- | ------------------- |
