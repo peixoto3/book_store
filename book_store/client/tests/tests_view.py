@@ -6,6 +6,10 @@ from rest_framework.test import APITestCase
 
 from django.urls import reverse
 
+from book.models import Book, BookReservation
+
+from book.serializers import BookReservationDetailSerializer
+
 
 class ClientTests(APITestCase):
 
@@ -72,3 +76,31 @@ class ClientTests(APITestCase):
         response = self.client.put(url, client_payload_update, format='json')
         self.assertEqual(response.data, client_payload_expected)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_client(self):
+        url = reverse('client-detail', kwargs={'pk': self.teo.pk})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_get_books_reserved_by_client(self):
+        book = Book.objects.create(
+            title='Livro de Programação',
+            author='Autor de programação',
+            numbers_pages=200,
+            reserve_price=100
+        )
+        Book.objects.create(
+            title='Livro de Programação II',
+            author='Autor de programação II',
+            numbers_pages=200,
+            reserve_price=100
+        )
+        BookReservation.objects.create(
+            book=book,
+            client=self.carol
+        )
+        reserved_books = BookReservationDetailSerializer(self.carol.reserved_books, many=True)
+        url = reverse('client-books', kwargs={'pk': self.carol.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, reserved_books.data)
