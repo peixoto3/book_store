@@ -132,7 +132,7 @@ docker-compose exec app python manage.py createsuperuser
 `````
 Para executar os testes unitários:
 `````dockerfile
-docker-compose exec app python manage.py tests
+docker-compose exec app python manage.py test
 `````
 
 
@@ -159,7 +159,7 @@ python manage.py createsuperuser
 
 Para executar os testes unitários:
 ```bash
-$ python manage.py tests
+$ python manage.py test
 ```
 
 
