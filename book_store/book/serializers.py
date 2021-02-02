@@ -51,7 +51,6 @@ class BookReservationDetailSerializer(serializers.ModelSerializer):
         model = BookReservation
         fields = [
             'date',
-            'delivery_date',
             'book_name',
             'days_of_delay',
             'penalty',

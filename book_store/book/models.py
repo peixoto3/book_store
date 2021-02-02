@@ -29,7 +29,6 @@ class BookReservation(models.Model):
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT, related_name='reserved_books')
     date = models.DateField(auto_now_add=True)
-    delivery_date = models.DateField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'Reserva de Livro'
