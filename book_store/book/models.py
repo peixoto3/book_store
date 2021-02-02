@@ -4,6 +4,7 @@ from django.db import models
 import datetime
 
 from client.models import Client
+from .util import CalculatorPenalty, CalculatorInterestPerDay
 
 
 class Book(models.Model):
@@ -13,23 +14,20 @@ class Book(models.Model):
     reserve_price = models.DecimalField(max_digits=10, decimal_places=2)
     reserved = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f'{self.title}, {self.author}'
-
     class Meta:
         verbose_name = 'Livro'
         verbose_name_plural = 'Livros'
         unique_together = ['title', 'author']
 
+    def __str__(self):
+        return f'{self.title}, {self.author}'
+
 
 class BookReservation(models.Model):
     DAYS_RENTED_WITHOUT_PENALTY = 3
-    THREE_PERCENT_TAX = 0.03
-    FIVE_PERCENT_TAX = 0.05
-    SEVEN_PERCENT_TAX = 0.07
 
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
-    client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    client = models.ForeignKey(Client, on_delete=models.PROTECT, related_name='reserved_books')
     date = models.DateField(auto_now_add=True)
     delivery_date = models.DateField(null=True, blank=True)
 
@@ -46,7 +44,8 @@ class BookReservation(models.Model):
         book.reserved = True
         book.save()
 
-    def get_days_of_delay(self):
+    @property
+    def days_of_delay(self):
         today = datetime.date.today()
 
         rented_days = today - self.date
@@ -56,21 +55,16 @@ class BookReservation(models.Model):
         days_of_delay = rented_days.days - self.DAYS_RENTED_WITHOUT_PENALTY
         return days_of_delay
 
-    def _calculate_penalty(self, tax):
-        """Calcula a multa a partir do percentual (tax) sobre o valor da reserva"""
-        return self.book.reserve_price * Decimal(tax)
+    def calculate_penalty(self):
+        if not self.days_of_delay:
+            return Decimal(0)
 
-    def value_penalty(self):
-        days_of_delay = self.get_days_of_delay()
+        calculate_penalty = CalculatorPenalty(self.days_of_delay)
+        return calculate_penalty.calculate(self.book.reserve_price)
 
-        if not days_of_delay:
-            return 0
+    def calculate_interest_per_day(self):
+        if not self.days_of_delay:
+            return Decimal(0)
 
-        if 0 < days_of_delay <= 3:
-            return self._calculate_penalty(self.THREE_PERCENT_TAX)
-
-        if 3 < days_of_delay <= 5:
-            return self._calculate_penalty(self.FIVE_PERCENT_TAX)
-
-        if days_of_delay > 5:
-            return self._calculate_penalty(self.SEVEN_PERCENT_TAX)
+        interest_per_day = CalculatorInterestPerDay(self.days_of_delay)
+        return interest_per_day.calculate(self.book.reserve_price)

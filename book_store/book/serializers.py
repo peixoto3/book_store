@@ -33,19 +33,19 @@ class BookReservationDetailSerializer(serializers.ModelSerializer):
     total_price = serializers.SerializerMethodField()
 
     def get_penalty(self, obj):
-        return obj.value_penalty()
+        return obj.calculate_penalty()
 
     def get_interest_per_day(self, obj):
-        return 0.00
+        return obj.calculate_interest_per_day()
 
     def get_book_name(self, obj):
         return obj.book.title
 
     def get_days_of_delay(self, obj):
-        return obj.get_days_of_delay()
+        return obj.days_of_delay
 
     def get_total_price(self, obj):
-        return obj.book.reserve_price + obj.value_penalty()
+        return obj.book.reserve_price + obj.calculate_penalty() + obj.calculate_interest_per_day()
 
     class Meta:
         model = BookReservation
