@@ -94,7 +94,7 @@ Exemplo:
 Clone o projeto repositório:
 
 ```bash
-$ git clone https://github.com/peixoto3/book_store
+git clone https://github.com/peixoto3/book_store
 ```
 
 
