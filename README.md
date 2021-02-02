@@ -172,5 +172,5 @@ $ python manage.py tests
 
 ## Postman
 
-Importe o arquivo ``book_store_collection.postman_collection.json`` no [postman](https://www.postman.com/) para obter 
-uma coleção de requisições configuradas para API Book Store. 
+Existe o arquivo ``book_store_collection.postman_collection.json`` com uma coleção de requisições configuradas para API Book Store no [postman](https://www.postman.com/).
+ 
