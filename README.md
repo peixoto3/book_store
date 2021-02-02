@@ -106,7 +106,13 @@ Para rodar o projeto com docker, certifique-se que tem o docker e docker-compose
 - [OS X](https://docs.docker.com/get-started/)
 - [Linux](https://docs.docker.com/get-started/)
 
-###Docker-compose
+### Docker-compose
+
+### Variáveis de ambiente
+
+Para configurar algumas variáveis de ambiente, editar o arquivo ``.env.dev`` na raiz do projeto. 
+
+
 
 - [Install Docker Compose](https://docs.docker.com/compose/install/)
 
