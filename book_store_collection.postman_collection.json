@@ -15,7 +15,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/v1/book/",
+							"raw": "localhost:8000/api/v1/books/",
 							"host": [
 								"localhost"
 							],
@@ -67,7 +67,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/v1/book/2/",
+							"raw": "localhost:8000/api/v1/books/2/",
 							"host": [
 								"localhost"
 							],
