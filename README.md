@@ -14,7 +14,7 @@ Caso ultrapasse, deverá ser calculada uma multa e juros ao dia sobre o valor da
 |  Acimca de 3 dias |  5% | 0.4%
 |  Acima de 5 dias |  7% | 0.6%
 
-# API V1 DOC
+# API v1 Doc
 
 ## Livros 
 
@@ -168,3 +168,9 @@ $ python manage.py tests
 - [Python 3.7+](https://www.python.org/downloads/release/python-374/)
 - [Django 3.1.5](https://docs.djangoproject.com/en/3.1/)
 - [djangorestframework 3.12.2](https://www.django-rest-framework.org/)
+
+
+## Postman
+
+Importe o arquivo ``book_store_collection.postman_collection.json`` no [postman](https://www.postman.com/) para obter 
+uma coleção de requisições configuradas para API Book Store. 
